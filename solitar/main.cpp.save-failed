@@ -1,0 +1,647 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <graphics.h>
+#include <dos.h>
+#include <cstring>
+#include <cmath>
+#include <iostream>
+
+/*
+#include <conio.h > */
+#define MAX 20
+#define FUNDAL CYAN
+#define culoarea_mea BLACK
+using namespace std;
+typedef unsigned char byte;
+typedef unsigned int word;
+byte Leg[26] = { 0, 6, 7, 8, 5, 4, 1, 2, 3, 10, 9, 12, 11, 0, 15, 14, 21, 22, 19, 18, 25, 16, 17, 24, 23, 20 };
+
+int scor, uga = 0, KONTOR = 0;
+int lat = 50;
+int culoare[3] = { FUNDAL, LIGHTRED, YELLOW};
+
+int i, j, tabla[8][8];
+int scor1, scor2;
+
+void OpenGraph()
+{
+	/*int gd=DETECT,gm;
+	initgraph(&gd,&gm,"c:\\bc\\bgi"); */
+	initwindow(450, 550, "Solitar");
+}
+
+
+void deseneazaMeniul()
+{
+	initwindow(450, 550, "meniu");
+	setfillstyle(SOLID_FILL, BLUE);
+
+	rectangle(100, 50, 350, 100);
+	outtextxy(210, 67, "PLAY");
+	floodfill(101, 51, WHITE);
+
+	rectangle(100, 150, 350, 200);
+	outtextxy(210, 167, "RULES");
+	floodfill(101, 151, WHITE);
+
+	rectangle(100, 250, 350, 300);
+	outtextxy(165, 267, "2 PLAYERS MODE");
+	floodfill(101, 251, WHITE);
+
+	rectangle(100, 350, 350, 400);
+	outtextxy(210, 367, "EXIT");
+	floodfill(101, 351, WHITE);
+
+}
+
+void afiseazaScor(int jucator)
+{
+	int n = 0, m = 0;
+	char sirScor1[10], sirScor2[10];
+	setcolor(LIGHTCYAN);
+	itoa(scor1, sirScor1, 10);
+	itoa(scor2, sirScor2, 10);
+
+	int i, j;
+	scor1 = 0, scor2 = 0;
+	if (jucator == 0)
+		for (i = 1; i <= 7; i++)
+			for (j = 1; j <= 7; j++)
+				if (tabla[i][j] == 0)
+				{
+					scor1 += 1;
+					itoa((scor1 - n) / 2, sirScor1, 10);
+					outtextxy(170, 460, sirScor1);
+				}
+
+	m = scor1;
+	if (jucator == 1)
+		for (i = 1; i <= 7; i++)
+			for (j = 1; j <= 7; j++)
+				if (tabla[i][j] == 0)
+
+	{
+		scor2 += 1;
+		itoa((scor2 - m - 1) / 2, sirScor2, 10);
+		outtextxy(402, 460, sirScor2);
+	}
+
+	n = scor2;
+
+}
+
+void initializareMatriceTabla()
+{
+	for (i = 0; i <= 8; i++)
+		for (j = 0; j <= 8; j++)
+			tabla[i][j] = 1;
+
+	tabla[4][4] = 2;
+
+	for (int i = 0; i <= 8; i++)
+	{
+		tabla[0][i] = 0;
+		tabla[8][i] = 0;
+		tabla[i][0] = 0;
+		tabla[i][8] = 0;
+	}
+
+	for (i = 1; i <= 2; i++)
+	{
+		tabla[1][i] = 0;
+		tabla[2][i] = 0;
+		tabla[6][i] = 0;
+		tabla[7][i] = 0;
+	}
+
+	for (i = 6; i <= 7; i++)
+	{
+		tabla[1][i] = 0;
+		tabla[2][i] = 0;
+		tabla[6][i] = 0;
+		tabla[7][i] = 0;
+	}
+}
+void numarDePiese ()
+{
+    int kk = 0, numarPIESE = 0;
+                    char KKK[10];
+
+                    for (int i = 0; i <= 8; i++)
+                        for (int j = 0; j <= 8; j++)
+                            if (tabla[i][j] == 1)
+                                kk++;
+
+
+                    itoa (kk, KKK, 10);
+                    outtextxy(220, 530, KKK);
+
+}
+
+int numarDePieseINT ()
+{
+    int kk = 0;
+
+
+                    for (int i = 0; i <= 8; i++)
+                        for (int j = 0; j <= 8; j++)
+                            if (tabla[i][j] == 1)
+                                kk++;
+    return kk;
+}
+void DesTabla()
+{
+	for (int i = 3; i < 6; i++)
+	{
+		setfillstyle(SOLID_FILL, 3);
+		bar(i *lat, lat, (i + 1) *lat, 2 *lat);
+		bar(i *lat, 2 *lat, (i + 1) *lat, 3 *lat);
+		rectangle(i *lat, lat, (i + 1) *lat, 2 *lat);
+		rectangle(i *lat, 2 *lat, (i + 1) *lat, 3 *lat);
+
+		circle(i *lat + lat / 2, 1.5 *lat, lat / 4);
+		circle(i *lat + lat / 2, 2.5 *lat, lat / 4);
+	}
+
+	for (int i = 1; i <= 7; i++)
+	{
+		setfillstyle(SOLID_FILL, 3);
+		bar(i *lat, lat *3, (i + 1) *lat, 4 *lat);
+		bar(i *lat, 4 *lat, (i + 1) *lat, 5 *lat);
+		bar(i *lat, 5 *lat, (i + 1) *lat, 6 *lat);
+		rectangle(i *lat, lat *3, (i + 1) *lat, 4 *lat);
+		rectangle(i *lat, 4 *lat, (i + 1) *lat, 5 *lat);
+		rectangle(i *lat, 5 *lat, (i + 1) *lat, 6 *lat);
+
+		circle(i *lat + lat / 2, 3.5 *lat, lat / 4);
+		circle(i *lat + lat / 2, 5.5 *lat, lat / 4);
+		if (i == 4)
+			continue;
+		else
+			circle(i *lat + lat / 2, 4.5 *lat, lat / 4);
+	}
+
+	for (int i = 3; i < 6; i++)
+	{
+		setfillstyle(SOLID_FILL, 3);
+		bar(i *lat, 6 *lat, (i + 1) *lat, 7 *lat);
+		bar(i *lat, 7 *lat, (i + 1) *lat, 8 *lat);
+		rectangle(i *lat, 6 *lat, (i + 1) *lat, 7 *lat);
+		rectangle(i *lat, 7 *lat, (i + 1) *lat, 8 *lat);
+
+		circle(i *lat + lat / 2, 6.5 *lat, lat / 4);
+		circle(i *lat + lat / 2, 7.5 *lat, lat / 4);
+	}
+}
+
+void deseneazaPiesa(int linia, int coloana, int culoare)
+{
+	int x1, y1, x2, y2;
+	int xmijloc, ymijloc;
+
+	// stergere
+
+	setcolor(GREEN);
+	setfillstyle(SOLID_FILL, RED);
+
+	x1 = lat + lat *(coloana - 1);
+	y1 = lat + lat *(linia - 1);
+	x2 = x1 + lat;
+	y2 = y1 + lat;
+
+	xmijloc = (x1 + x2) / 2;
+	ymijloc = (y1 + y2) / 2;
+
+	// bar(xmijloc, ymijloc, xmijloc, ymijloc);
+
+	setcolor(culoare);
+	setfillstyle(SOLID_FILL, culoare);
+	fillellipse(xmijloc, ymijloc, lat / 4, lat / 4);
+}
+
+void matriceVizualaActualizata()
+{
+	int x1, y1, x2, y2;
+	int xmijloc, ymijloc;
+
+	setcolor(WHITE);
+	for (int i = 0; i <= 8; i++)
+		for (int j = 0; j <= 8; j++)
+		{
+			char v[2];
+			int b = tabla[i][j];
+			v[1] = '\0';
+			v[0] = '0' + b;
+			x1 = lat + lat *(i - 1);
+			y1 = lat + lat *(j - 1);
+			x2 = x1 + lat;
+			y2 = y1 + lat;
+			xmijloc = (x1 + x2) / 2;
+			ymijloc = (y1 + y2) / 2;
+			outtextxy(xmijloc - 4, ymijloc - 8, v);
+		}
+}
+
+bool verificareMutarePiesa(int coloana1, int linia1, int coloana2, int linia2)
+{
+	int k = 0;
+	if ((abs(linia2 - linia1) == 2 || abs(coloana2 - coloana1) == 2) &&
+		(linia1 == linia2 || coloana1 == coloana2) &&
+		tabla[coloana1][linia1] != 0 && tabla[coloana2][linia2] != 0 &&
+		// tabla[linia1][coloana1] != tabla[linia2][coloana2])
+		tabla[coloana1][linia1] == 1 && tabla[coloana2][linia2] == 2 &&
+		tabla[(coloana1 + coloana2) / 2][linia1] != 2 &&
+		tabla[coloana1][(linia1 + linia2) / 2] != 2)
+		k++;
+
+	if (k == 0)
+		return false;
+	else
+		return true;
+}
+void verificarePozitieValida()
+{
+	int lose = 0, count = 0;
+	for (int i = 1; i < 8; i++) {
+		for (int j = 1; j < 8; j++) {
+			if(tabla[i][j] == 1){
+				count++;
+				if ((tabla[i][j+1] % 2 == 0 &&
+					tabla[i][j-1] % 2 == 0 &&
+					tabla[i+1][j] % 2 == 0 &&
+					tabla[i-1][j] % 2 == 0) ||
+					((tabla[i+1][j] % 2 == 0 &&
+					tabla[i-1][j] % 2 == 0)) && (
+					(tabla[1][4] == 1  && tabla[1][5] == 1 && tabla[1][3] == 1) ||
+					(tabla[4][1] == 1  && tabla[5][1] == 1 && tabla[3][1] == 1) ||
+					(tabla[4][7] == 1  && tabla[5][7] == 1 && tabla[3][7] == 1) ||
+					(tabla[7][4] == 1  && tabla[7][5] == 1 && tabla[7][3] == 1)))
+					lose++;
+                 /*   ||
+					(tabla[i][j + 1] % 2 == 0 &&
+					tabla[i][j - 1] % 2 == 0 && (
+					(tabla[1][4] == 1  && tabla[1][5] == 1 && tabla[1][3] == 1) ||
+					(tabla[4][1] == 1  && tabla[5][1] == 1 && tabla[3][1] == 1) ||
+					(tabla[4][7] == 1  && tabla[5][7] == 1 && tabla[3][7] == 1) ||
+					(tabla[7][4] == 1  && tabla[7][5] == 1 && tabla[7][3] == 1))
+					)))lose++;   */
+			}
+		}
+	}
+
+	char s1[10], s2[10];
+	itoa (lose, s1, 10);
+	outtextxy (0, 470, s1);
+	itoa (count, s2, 10);
+	outtextxy(0, 490, s2);
+
+}
+int verificarePozitieValidaINT()
+{
+	int lose = 0, count = 0;
+	for (int i = 1; i < 8; i++) {
+		for (int j = 1; j < 8; j++) {
+			if(tabla[i][j] == 1){
+				count++;
+				count++;
+				if ((tabla[i][j+1] % 2 == 0 &&
+					tabla[i][j-1] % 2 == 0 &&
+					tabla[i+1][j] % 2 == 0 &&
+					tabla[i-1][j] % 2 == 0) ||
+					((tabla[i+1][j] % 2 == 0 &&
+					tabla[i-1][j] % 2 == 0)) && (
+					(tabla[1][4] == 1  && tabla[1][5] == 1 && tabla[1][3] == 1) ||
+					(tabla[4][1] == 1  && tabla[5][1] == 1 && tabla[3][1] == 1) ||
+					(tabla[4][7] == 1  && tabla[5][7] == 1 && tabla[3][7] == 1) ||
+					(tabla[7][4] == 1  && tabla[7][5] == 1 && tabla[7][3] == 1)))
+					lose++;
+                 /*   ||
+					(tabla[i][j + 1] % 2 == 0 &&
+					tabla[i][j - 1] % 2 == 0 && (
+					(tabla[1][4] == 1  && tabla[1][5] == 1 && tabla[1][3] == 1) ||
+					(tabla[4][1] == 1  && tabla[5][1] == 1 && tabla[3][1] == 1) ||
+					(tabla[4][7] == 1  && tabla[5][7] == 1 && tabla[3][7] == 1) ||
+					(tabla[7][4] == 1  && tabla[7][5] == 1 && tabla[7][3] == 1))
+					)))lose++;   */
+			}
+		}
+	}
+
+   return lose;
+
+
+}
+void verificarePozitieValidaINTconsole()
+{
+	int lose = 0, count = 0;
+	for (int i = 1; i < 8; i++) {
+		for (int j = 1; j < 8; j++) {
+			if(tabla[i][j] == 1){
+				count++;
+				if ((tabla[i][j+1] % 2 == 0 &&
+					tabla[i][j-1] % 2 == 0 &&
+					tabla[i+1][j] % 2 == 0 &&
+					tabla[i-1][j] % 2 == 0) ||
+					((tabla[i+1][j] % 2 == 0 &&
+					tabla[i-1][j] % 2 == 0)) && (
+					(tabla[1][4] == 1  && tabla[1][5] == 1 && tabla[1][3] == 1) ||
+					(tabla[4][1] == 1  && tabla[5][1] == 1 && tabla[3][1] == 1) ||
+					(tabla[4][7] == 1  && tabla[5][7] == 1 && tabla[3][7] == 1) ||
+					(tabla[7][4] == 1  && tabla[7][5] == 1 && tabla[7][3] == 1)))
+					lose++;
+                 /*   ||
+					(tabla[i][j + 1] % 2 == 0 &&
+					tabla[i][j - 1] % 2 == 0 && (
+					(tabla[1][4] == 1  && tabla[1][5] == 1 && tabla[1][3] == 1) ||
+					(tabla[4][1] == 1  && tabla[5][1] == 1 && tabla[3][1] == 1) ||
+					(tabla[4][7] == 1  && tabla[5][7] == 1 && tabla[3][7] == 1) ||
+					(tabla[7][4] == 1  && tabla[7][5] == 1 && tabla[7][3] == 1))
+					)))lose++;   */
+
+			}
+		}
+	}
+
+   cout << lose << " " <<  count;
+
+}
+bool mutarePiesa(int jucator)
+{
+	bool k = false;
+	int linia1, coloana1, linia2, coloana2, x, y;
+	int x1, y1, x2, y2;
+	int xmijloc, ymijloc;
+	int click = false;
+	matriceVizualaActualizata();
+    int numarPiesePierdute = verificarePozitieValidaINT();
+    int numarPiese = numarDePieseINT();
+    verificarePozitieValidaINTconsole();
+	do
+		if (ismouseclick(WM_LBUTTONDOWN) && !click)
+		{
+			click = true;
+			clearmouseclick(WM_LBUTTONDOWN);
+			x = mousex();
+			y = mousey();
+			linia1 = (y - lat) / lat + 1;
+			coloana1 = (x - lat) / lat + 1;
+		}
+
+	while (!click);
+
+	if (jucator == 0)
+		if (tabla[coloana1][linia1] == 1 || tabla[coloana1][linia1] == 0)
+			deseneazaPiesa(linia1, coloana1, 13);
+	if (jucator == 1)
+		if (tabla[coloana1][linia1] == 1 || tabla[coloana1][linia1] == 0)
+			deseneazaPiesa(linia1, coloana1, 9);
+
+	click = false;
+
+	do
+		if (ismouseclick(WM_LBUTTONDOWN) && !click)
+		{
+			click = true;
+			clearmouseclick(WM_LBUTTONDOWN);
+			x = mousex();
+			y = mousey();
+			linia2 = (y - lat) / lat + 1;
+			coloana2 = (x - lat) / lat + 1;
+		} while (!click);
+
+	if (jucator == 0)
+	{
+
+            if(numarPiese == numarPiesePierdute)
+            {
+                for (int i = 1; i <= 7; i++)
+                    for (int j = 1; j <= 7; j++)
+                        if (tabla[i][j] =! 0 && tabla [i][j] != 2)
+                            deseneazaPiesa(i, j, 6);
+                delay(150000);
+
+                 cleardevice();
+                outtextxy(200, 200, "GAME OVER!");
+            }
+            else
+            {
+
+
+                cout << endl;
+
+                if (verificareMutarePiesa(coloana1, linia1, coloana2, linia2))
+                {
+                    tabla[coloana1][linia1] = 2;
+                    tabla[coloana2][linia2] = 1;
+                    deseneazaPiesa(linia2, coloana2, WHITE);
+                    deseneazaPiesa(linia1, coloana1, culoarea_mea);
+
+                    if (linia1 == linia2)
+                    {
+                        tabla[(coloana1 + coloana2) / 2][linia1] = 2;
+                        deseneazaPiesa(linia1, (coloana1 + coloana2) / 2, BLACK);
+                    }
+                    else if (coloana1 == coloana2)
+                    {
+                        tabla[coloana1][(linia1 + linia2) / 2] = 2;
+                        deseneazaPiesa((linia1 + linia2) / 2, coloana1, BLACK);
+                    }
+                }
+                else
+                {
+                    if (tabla[coloana1][linia1] == 1)
+                        deseneazaPiesa(linia1, coloana1, WHITE);
+                    else if (tabla[coloana1][linia1] == 2)
+                        deseneazaPiesa(linia1, coloana1, BLACK);
+                    outtextxy(160, 500, "MISCARE INVALIDA!");
+                    delay(700);
+                    setfillstyle(SOLID_FILL, BLACK);
+                    bar(160, 500, 400, 550);
+                    mutarePiesa(0);
+                }
+                verificarePozitieValidaINT();
+            }
+	}
+	else if (jucator == 1)
+	{
+		if (verificareMutarePiesa(coloana1, linia1, coloana2, linia2))
+		{
+			tabla[coloana1][linia1] = 2;
+			tabla[coloana2][linia2] = 1;
+			deseneazaPiesa(linia2, coloana2, WHITE);
+			deseneazaPiesa(linia1, coloana1, culoarea_mea);
+
+			if (linia1 == linia2)
+			{
+				tabla[(coloana1 + coloana2) / 2][linia1] = 2;
+				deseneazaPiesa(linia1, (coloana1 + coloana2) / 2, BLACK);
+			}
+			else if (coloana1 == coloana2)
+			{
+				tabla[coloana1][(linia1 + linia2) / 2] = 2;
+				deseneazaPiesa((linia1 + linia2) / 2, coloana1, BLACK);
+			}
+
+			// deseneazaPiesa(linia2, coloana2, culoarea_mea);
+		}
+		else
+		{
+			if (tabla[coloana1][linia1] == 1)
+				deseneazaPiesa(linia1, coloana1, WHITE);
+			else if (tabla[coloana1][linia1] == 2)
+				deseneazaPiesa(linia1, coloana1, BLACK);
+			outtextxy(160, 500, "MISCARE INVALIDA!");
+			delay(700);
+			setfillstyle(SOLID_FILL, BLACK);
+			bar(160, 500, 400, 550);
+			mutarePiesa(1);
+		}
+	}
+}
+
+void initializarePieseTabla()
+{
+	for (int i = 0; i <= 8; i++)
+		for (int j = 0; j <= 8; j++)
+			if (tabla[i][j] == 1)
+				deseneazaPiesa(i, j, WHITE);
+
+	deseneazaPiesa(4, 4, BLACK);
+}
+
+bool este_meci_neterminat()
+{
+	int suma = 0;
+	for (int i = 1; i < 8; i++)
+		for (int j = 1; j < 8; j++)
+			suma += tabla[i][j];
+	if (suma == 65 && tabla[4][4] == 1)
+		return false;
+	else
+		return true;
+}
+
+
+
+
+
+
+// functii de facut
+// 1. verificare existenta piese in pozitii inposibile
+// 2. fisiere poze, sunet
+// 3. 2 jucatori (jump multiplu pentru fiecare player)
+// 4. meniu
+
+int main()
+{
+	deseneazaMeniul();
+	POINT mouse;
+
+	int mx, my, click = false;
+	do
+		if (ismouseclick(WM_LBUTTONDOWN) && !click)
+		{
+			click = true;
+			clearmouseclick(WM_LBUTTONDOWN);
+			mx = mousex();
+			my = mousey();
+
+			if ((mx > 100 && mx < 350) && (my > 50 && my < 100))
+			{
+			    delay(100);
+			    cleardevice();
+
+				// OpenGraph();
+
+				DesTabla();
+				initializareMatriceTabla();
+
+
+				initializarePieseTabla();
+
+				setcolor(LIGHTCYAN);
+				outtextxy(50, 460, "SCOR JUCATOR1:");
+				outtextxy(277, 460, "SCOR JUCATOR2:");
+
+				int ok = 0;
+				do {
+
+
+					este_meci_neterminat();
+					numarDePiese();
+					 //matriceVizualaActualizata();
+					mutarePiesa(0);
+
+
+
+					afiseazaScor(0);
+					// matriceVizualaActualizata();
+					 verificarePozitieValida();
+
+					// mutarePiesa(1);
+					// afiseazaScor(1);
+					numarDePiese();
+
+				} while (este_meci_neterminat());
+				// while (!castigat(1) && !castigat(2));
+
+				outtextxy(200, 470, "AI CASTIGAT.");
+			}
+		}
+
+	while (!click);
+
+	getch();
+	closegraph();
+
+	return 0;
+}
+
+
+
+
+/*
+bool verificareExistenta ()
+{
+int coloana, linia; int k = 0;
+    for (int i = 1; i < 8; i++)
+        for (int j = 1; j < 8; j++)
+            if(tabla[i][j] != 3)
+             	//  if (numarDePiese() > 1)
+                    {
+                        coloana = i;
+                        linia = j;
+                        if ((tabla[coloana][linia - 2] != 1 &&
+                             tabla[coloana][linia + 2] != 1 &&
+                             tabla[coloana - 2][linia] != 1 &&
+                             tabla[coloana + 2][linia] != 1)
+                                           ||
+                            (tabla[coloana][linia - 2] != 0 &&
+                             tabla[coloana][linia + 2] != 0 &&
+                             tabla[coloana - 2][linia] != 0 &&
+                             tabla[coloana + 2][linia] != 0)
+                          )
+                            k ++;
+                    }
+
+    if (k > 0)
+        return false;
+    else
+        return true;
+
+}
+
+functie verificare fiecare pozitie posibila
+
+ok = 1;
+        for (int i = 1; i < 8; i++)
+            for (int j = 1; j < 8; j++)
+                if (tabla[i][j] == 1)
+                    {
+                    for (int x = i - 2; x < i + 3; x++)
+                        for (int y = j - 2; y < j + 3; y++)
+                            if (!verificareMutarePiesa(i, j, x, y))
+                                ok = 0;
+                    }
+
+*/

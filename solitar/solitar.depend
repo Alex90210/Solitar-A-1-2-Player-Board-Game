@@ -1,0 +1,40 @@
+# depslib dependency file v1.0
+1672058601 source:c:\users\alber\onedrive\desktop\solitar\main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<graphics.h>
+	<dos.h>
+	<cstring>
+	<cmath>
+	<iostream>
+	<windows.h>
+	<ctime>
+	<cstdlib>
+	<conio.h >
+
+1671208015 c:\users\alber\onedrive\desktop\solitar\head.h
+	<stdio.h>
+	<stdlib.h>
+	<graphics.h>
+	<dos.h>
+	<cstring>
+	<cmath>
+	<iostream>
+	<conio.h >
+
+1671208115 source:c:\users\alber\onedrive\desktop\solitar\source.cpp
+	"head.h"
+
+1673440168 source:c:\users\alber\desktop\solitar\main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<graphics.h>
+	<dos.h>
+	<cstring>
+	<cmath>
+	<iostream>
+	<windows.h>
+	<ctime>
+	<cstdlib>
+	<conio.h >
+
